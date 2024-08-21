@@ -1,5 +1,7 @@
 # CrousBot
 
+![crousbot_logo](./images/crous_bot_logo.svg)
+
 CrousBot is a bot that helps people get notified if new apartments are being added in [trouverunlogement](https://trouverunlogement.lescrous.fr/). This bot helps people quickly get a notification to reserve an apartment. This ensures that users can act quickly to secure an apartment.
 
 ## Installation
