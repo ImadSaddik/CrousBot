@@ -127,7 +127,7 @@ if __name__ == "__main__":
     }
     
     logger.info("Starting the scraper")
-    for _ in range(0, 10):
+    for _ in range(0, 60*10):
         for location, url in locations.items():
             check_for_new_offers(location, url)
-            time.sleep(5)
+            time.sleep(1)

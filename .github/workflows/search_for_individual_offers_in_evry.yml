@@ -2,7 +2,7 @@ name: Daily Every scrapper for individual offers
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # Run every minute
+    - cron: "*/15 * * * *" # Run every minute
   workflow_dispatch: # Allow manual triggering
 
 jobs:
