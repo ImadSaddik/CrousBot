@@ -1,8 +1,6 @@
-name: Daily Every scrapper for individual offers
+name: Daily Evry scrapper for colocation offers
 
 on:
-  schedule:
-    - cron: "*/5 * * * *" # Run every 5 minutes
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -30,4 +28,4 @@ jobs:
           echo "SENDER_PASSWORD=${{ secrets.SENDER_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Run scrapper for Evry
-        run: python main_individual.py
+        run: python main_collocation.py
