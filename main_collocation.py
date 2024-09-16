@@ -31,7 +31,15 @@ def setup_logger(log_dir="logs", log_file="scraper.log", max_bytes=10*1024*1024,
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(file_formatter)
 
+    # Add file handler to logger
     logger.addHandler(file_handler)
+
+    # Add stream handler to logger
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.DEBUG)
+    stream_handler.setFormatter(file_formatter)
+    logger.addHandler(stream_handler)
+
     return logger
 
 logger = setup_logger()
@@ -48,34 +56,9 @@ def check_for_new_offers(location, url):
             message = search_result.get_text(strip=True)
 
             if "Aucun logement" not in message:
-                individual_appartments_counter = get_inidividual_appartment_offers_count(
-                    soup)
-
-                if individual_appartments_counter > 0:
-                    log_content(location, message)
-                    send_email(location, message, url, os.getenv("RECEIVER_EMAIL")) # send it to other person
-                    send_email(location, message, url, os.getenv("SENDER_EMAIL")) # send it to me 2
-
-
-def get_inidividual_appartment_offers_count(soup):
-    card_classes = "fr-col-12 fr-col-sm-6 fr-col-md-4 svelte-11sc5my fr-col-lg-4"
-    aprtment_cards = soup.find_all("li", class_=card_classes)
-
-    individual_appartments_counter = 0
-    for card in aprtment_cards:
-        card_detail_classes = "fr-card__detail fr-icon-group-fill"
-        card_detail = card.find("p", class_=card_detail_classes)
-        card_colocation_or_individual_text = card_detail.get_text(strip=True)
-
-        if card_colocation_or_individual_text == "Colocation":
-            continue
-        elif card_colocation_or_individual_text == "Individuel":
-            apartment_title = card.find(
-                "h3", class_="fr-card__title").get_text(strip=True)
-            log_content("Individual Appartment found", apartment_title)
-            individual_appartments_counter += 1
-
-    return individual_appartments_counter
+                log_content(location, message)
+                send_email(location, message, url, os.getenv("RECEIVER_EMAIL")) # send it to other person
+                send_email(location, message, url, os.getenv("SENDER_EMAIL")) # send it to me 2
 
 
 def log_content(location, message):
@@ -111,7 +94,8 @@ def send_email(location, message, url, receiver_email):
         
         
 if __name__ == "__main__":
-    url = "https://trouverunlogement.lescrous.fr/tools/36/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
+    # url = "https://trouverunlogement.lescrous.fr/tools/36/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
+    url = "https://trouverunlogement.lescrous.fr/tools/36/search"
 
     locations = {
         "Evry": url,
