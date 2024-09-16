@@ -118,7 +118,5 @@ if __name__ == "__main__":
     }
     
     logger.info("Starting the scraper")
-    while True:
-        for location, url in locations.items():
-            check_for_new_offers(location, url)
-
+    for location, url in locations.items():
+        check_for_new_offers(location, url)

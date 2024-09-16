@@ -6,7 +6,7 @@ on:
   workflow_dispatch: # Allow manual triggering
 
 jobs:
-  update-apod:
+  scrape-evry:
     runs-on: ubuntu-latest
 
     steps:
