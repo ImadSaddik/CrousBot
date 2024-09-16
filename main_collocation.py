@@ -94,8 +94,7 @@ def send_email(location, message, url, receiver_email):
         
         
 if __name__ == "__main__":
-    # url = "https://trouverunlogement.lescrous.fr/tools/36/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
-    url = "https://trouverunlogement.lescrous.fr/tools/36/search"
+    url = "https://trouverunlogement.lescrous.fr/tools/36/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
 
     locations = {
         "Evry": url,
