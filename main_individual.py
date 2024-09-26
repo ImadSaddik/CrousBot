@@ -81,10 +81,31 @@ def get_inidividual_appartment_offers_count(soup):
         elif card_colocation_or_individual_text == "Individuel":
             apartment_title = card.find(
                 "h3", class_="fr-card__title").get_text(strip=True)
-            log_content("Individual Appartment found", apartment_title)
-            individual_appartments_counter += 1
+            if check_if_new_offers_available(card):
+                log_content("Individual Appartment found", apartment_title)
+                individual_appartments_counter += 1
 
     return individual_appartments_counter
+
+
+def check_if_new_offers_available(card):
+    apartment_link = card.find("a")["href"]
+    appartment_offer_page = f"""https://trouverunlogement.lescrous.fr{
+        apartment_link}"""
+
+    response = requests.get(appartment_offer_page)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        button_container = soup.find("div", class_="fr-mb-3w")
+        button = button_container.find(
+            "button", class_="svelte-eq6rxe fr-btn")
+        span = button.find("span", class_="svelte-eq6rxe")
+        span_text = span.get_text(strip=True)
+        if span_text != "Indisponible":
+            return True
+        
+    return False
 
 
 def log_content(location, message):
