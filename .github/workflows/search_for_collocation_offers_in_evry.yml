@@ -1,10 +1,10 @@
-name: Daily Evry scrapper for colocation offers
+name: Daily Paris scrapper for colocation offers
 
 on:
   workflow_dispatch: # Allow manual triggering
 
 jobs:
-  scrape-evry:
+  scrape-paris:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,5 +27,5 @@ jobs:
           echo "SENDER_EMAIL=${{ secrets.SENDER_EMAIL }}" >> $GITHUB_ENV
           echo "SENDER_PASSWORD=${{ secrets.SENDER_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Run scrapper for Evry
+      - name: Run scrapper for Paris
         run: python main_collocation.py
