@@ -2,8 +2,8 @@ name: Daily Paris scrapper for individual offers
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # Run every minute
-  workflow_dispatch: # Allow manual triggering
+    - cron: "*/15 * * * *" 
+  workflow_dispatch:
 
 jobs:
   scrape-paris:

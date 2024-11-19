@@ -1,49 +1,18 @@
 import os
 import time
+import smtplib
 import requests
 import traceback
+
 from bs4 import BeautifulSoup
-
 from dotenv import load_dotenv
-
-import smtplib
+from playsound import playsound
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-import logging
-from logging.handlers import RotatingFileHandler
 
-load_dotenv()
-
-
-def setup_logger(log_dir="logs", log_file="scraper.log", max_bytes=10*1024*1024, backup_count=5):
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-
-    file_formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    log_dir = os.path.join(os.getcwd(), log_dir)
-    os.makedirs(log_dir, exist_ok=True)
-    file_handler = RotatingFileHandler(
-        filename=os.path.join(log_dir, log_file),
-        maxBytes=max_bytes,
-        backupCount=backup_count
-    )
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(file_formatter)
-
-    # Add file handler to logger
-    logger.addHandler(file_handler)
-
-    # Add stream handler to logger
-    stream_handler = logging.StreamHandler()
-    stream_handler.setLevel(logging.DEBUG)
-    stream_handler.setFormatter(file_formatter)
-    logger.addHandler(stream_handler)
-
-    return logger
-
-logger = setup_logger()
+def play_beep():
+    playsound('./sound/Beep-09.ogg')
 
 
 def check_for_new_offers(location, url):
@@ -59,11 +28,11 @@ def check_for_new_offers(location, url):
             if "Aucun logement" not in message:
                 individual_appartments_counter = get_inidividual_appartment_offers_count(
                     soup)
-
                 if individual_appartments_counter > 0:
-                    log_content(location, message)
-                    send_email(location, message, url, os.getenv("RECEIVER_EMAIL")) # send it to other person
-                    send_email(location, message, url, os.getenv("SENDER_EMAIL")) # send it to me 2
+                    print(
+                        f"Found {individual_appartments_counter} new offers in {location}")
+                    send_email(location=location, message=message, url=url,
+                               receiver_email=os.getenv("RECEIVER_EMAIL"))
 
 
 def get_inidividual_appartment_offers_count(soup):
@@ -81,6 +50,7 @@ def get_inidividual_appartment_offers_count(soup):
         elif card_colocation_or_individual_text == "Individuel":
             apartment_title = card.find(
                 "h3", class_="fr-card__title").get_text(strip=True)
+
             if check_if_new_offers_available(card):
                 log_content("Individual Appartment found", apartment_title)
                 individual_appartments_counter += 1
@@ -97,20 +67,18 @@ def check_if_new_offers_available(card):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
 
-        button_container = soup.find("div", class_="fr-mb-3w")
-        button = button_container.find(
-            "button", class_="svelte-eq6rxe fr-btn")
-        span = button.find("span", class_="svelte-eq6rxe")
-        span_text = span.get_text(strip=True)
-        if span_text != "Indisponible":
+        div_container = soup.find("div", class_="fr-mb-3w")
+        a_tag = div_container.find("a", class_="fr-btn")
+        if a_tag:
             return True
-        
+
     return False
 
 
 def log_content(location, message):
-    log_entry = f"{location.ljust(60)}: {message}\n"
-    logger.info(log_entry)
+    play_beep()
+    time.sleep(1)
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {location}: {message}\n")
 
 
 def send_email(location, message, url, receiver_email):
@@ -138,17 +106,33 @@ def send_email(location, message, url, receiver_email):
     except Exception as e:
         print(f"Error sending email: {e}")
         traceback.print_exc()
-        
-        
+
+
 if __name__ == "__main__":
-    url = "https://trouverunlogement.lescrous.fr/tools/36/search?bounds=2.224122_48.902156_2.4697602_48.8155755"
+    load_dotenv()
+
+    url_1 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.224122_48.902156_2.4697602_48.8155755"
+    url_2 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.3456154_48.8420887_2.3481533_48.8407925"
+    url_3 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.3475418_48.8403664_2.349218_48.8392315"
+    url_4 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.338511_48.8460901_2.3398229_48.8446256"
+    url_5 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.3426248_48.8441866_2.3447498_48.8435835"
+    url_6 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.2723279_48.8710747_2.2745213_48.8691568"
+    url_7 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.3290562_48.849943_2.3309234_48.8479074"
+    url_8 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.3453689_48.8276182_2.3469872_48.8259151"
+    url_9 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
 
     locations = {
-        "Paris": url,
+        "Paris": url_1,
+        "ESPCI Paris, Paris": url_2,
+        "AgroParisTech, Paris": url_3,
+        "MINES ParisTech, Paris": url_4,
+        "Chimie ParisTech, Paris": url_5,
+        "Université Paris-Dauphine, Paris": url_6,
+        "Institut Catholique de Paris, Paris": url_7,
+        "Télécom ParisTech, Paris": url_8,
+        "Evry": url_9
     }
-    
-    logger.info("Starting the scraper")
-    for _ in range(0, 60*10):
+
+    while True:
         for location, url in locations.items():
             check_for_new_offers(location, url)
-            time.sleep(1)

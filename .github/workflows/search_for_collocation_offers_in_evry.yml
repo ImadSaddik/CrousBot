@@ -1,7 +1,7 @@
 name: Daily Paris scrapper for colocation offers
 
 on:
-  workflow_dispatch: # Allow manual triggering
+  workflow_dispatch:
 
 jobs:
   scrape-paris:
