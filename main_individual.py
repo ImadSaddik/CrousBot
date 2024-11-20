@@ -133,3 +133,4 @@ if __name__ == "__main__":
             check_for_new_offers(location, url)
             
         time.sleep(1)
+        counter += 1
