@@ -6,13 +6,8 @@ import traceback
 
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from playsound import playsound
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-
-def play_beep():
-    playsound('./sound/Beep-09.ogg')
 
 
 def check_for_new_offers(location, url):
@@ -76,8 +71,6 @@ def check_if_new_offers_available(card):
 
 
 def log_content(location, message):
-    play_beep()
-    time.sleep(1)
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {location}: {message}\n")
 
 
