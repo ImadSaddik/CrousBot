@@ -133,6 +133,10 @@ if __name__ == "__main__":
         "Evry": url_9
     }
 
-    while True:
+    counter = 0
+    max_iterations = 600
+    while counter < max_iterations:
         for location, url in locations.items():
             check_for_new_offers(location, url)
+            
+        time.sleep(1)
