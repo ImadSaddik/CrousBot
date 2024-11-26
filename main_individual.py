@@ -115,14 +115,14 @@ if __name__ == "__main__":
     url_9 = "https://trouverunlogement.lescrous.fr/tools/37/search?bounds=2.4130316_48.6485333_2.4705092_48.6109217"
 
     locations = {
-        "Paris": url_1,
-        "ESPCI Paris, Paris": url_2,
-        "AgroParisTech, Paris": url_3,
-        "MINES ParisTech, Paris": url_4,
-        "Chimie ParisTech, Paris": url_5,
-        "Université Paris-Dauphine, Paris": url_6,
-        "Institut Catholique de Paris, Paris": url_7,
-        "Télécom ParisTech, Paris": url_8,
+        # "Paris": url_1,
+        # "ESPCI Paris, Paris": url_2,
+        # "AgroParisTech, Paris": url_3,
+        # "MINES ParisTech, Paris": url_4,
+        # "Chimie ParisTech, Paris": url_5,
+        # "Université Paris-Dauphine, Paris": url_6,
+        # "Institut Catholique de Paris, Paris": url_7,
+        # "Télécom ParisTech, Paris": url_8,
         "Evry": url_9
     }
 
